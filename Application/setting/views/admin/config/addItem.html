@@ -1,0 +1,147 @@
+<style>
+    .config-list{
+        padding: 10px;
+        margin: 10px;
+        background: #f8f8f8;
+        border: 1px solid #ddd;}
+    .config-list b{
+        float: left;
+        display: inline-block;
+        line-height: 30px;
+        margin-right: 5px;
+        margin-left: 10px;}
+    .config-list input{
+        float: left;
+        width: 150px;}
+    .config-list select{width: auto;max-width: 200px;}
+    .config-del{
+        right: 10px;
+        top:10px;}
+</style>
+<div ms-controller="config-addItem">
+<div class="f-cb f-mb10"><h3 class="list-title">编辑数据</h3>
+    <span class="f-fr"><a href="javascript:history.go(-1);" class="f-btn">返回</a></span></div>
+<div class="mkoa-box">
+    <div class="f-p10">
+    <form>
+        <table class="mkoa-form">
+            <tr ms-if="form.id">
+                <td width="120"><span class="mkoa-form-title">ID</span></td><td>{{form.id}}</td>
+            </tr>
+            <tr><td class="mkoa-form-title"><span>配置名称</span></td>
+                <td><input type="text" ms-duplex="form.name"/></td></tr><tr><td class="mkoa-form-title"><span>标识(字母)</span></td>
+                <td><input type="text" ms-duplex="form.key"/></td></tr><tr><td class="mkoa-form-title"><span>配置简介</span></td>
+                <td><input type="text" ms-duplex="form.description"/></td></tr>
+            <tr><td class="mkoa-form-title"><span>配置内容</span></td>
+                <td>
+                    <mkoa:layer $fvm="config-addItem"  title="增加配置"  width="500" height="400">
+                        <button slot="$tpl" class="f-btn" type="button" ms-click="layerOpen(app.$host+'setting/admin/config/configItem')">增加配置项</button>
+                    </mkoa:layer>
+                    <div ms-repeat="form.content">
+                        <div class="config-list f-pr">
+                            <div class="f-cb"><b>名称：</b><input type="text" ms-duplex="el.name"/>
+                            <b>标识（字母）：</b><input type="text" ms-duplex="el.key"/>
+                                <sapn ms-if-loop="el.type!=2"><b>值：</b>
+                                <input ms-if-loop="el.type==1" type="text" ms-duplex="el.value"/>
+                                    <span ms-if-loop="el.type==3">
+                                        <select ms-duplex="el.value">
+                                            <option value="">请选择</option>{{getOption(el)|html}}</select>
+                                    </span>
+                                </sapn>
+                            </div>
+                           <div ms-if-loop="el.type==2" class="f-mt10 f-cb">
+                               <b>配置值:</b>
+                               <textarea  type="text" ms-duplex="el.value"></textarea>
+                           </div>
+                            <button type="button" ms-click="$remove" class="f-pa f-btn config-del">删除</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr ms-if="form.createdAt">
+                <td width="120"><span class="mkoa-form-title">创建时间</span></td><td>{{form.createdAt|date("yyyy-MM-dd HH:mm:ss")}}</td>
+            </tr>
+            <tr ms-if="form.updatedAt">
+                <td width="120"><span class="mkoa-form-title">更新时间</span></td><td>{{form.updatedAt|date("yyyy-MM-dd HH:mm:ss")}}</td>
+            </tr>
+
+        </table>
+        <div class="f-mt10 f-tac">
+            <button type="button" class="f-btn f-btn-success" ms-class="f-btn-disabled:isLock" ms-click="save">{{isLock?'稍等...':'保存';}}</button>
+        </div>
+    </form>
+    </div>
+</div>
+</div>
+<script>
+    (function(){
+        //验证规则
+        var rules =  {
+                name: {rule:'required',error:'验证失败!'},
+                key: {rule:'required',error:'验证失败!'},
+                description: {rule:'',error:'验证失败!'},
+                content: {rule:'required',error:'验证失败!'}};
+
+        var id=avalon.vmodels['router'].GET['id'];//是否存在id
+        var form={"name":"","key":"","description":"","content":[]};//数据对象
+        require(["mkoaAjax/mkoaAjax","KoaValidator","mkoaMsg/mkoaMsg","mkoaLayer/mkoaLayer"],function($a,$v,$msg){
+        if(id){//更新数据
+            $a.getJSON(app.$host +'setting/admin/config/findOne',{id:id,t:new Date().getTime()},function(data){//获取列表数据
+                if(!data.error){
+                    data.data.content=JSON.parse(data.data.content);
+                    pageLoad(data.data);
+                }
+            });
+        }else{//新增数据
+            pageLoad(form);
+        }
+        function pageLoad(form){
+            var vm=avalon.define({
+                $id:'config-addItem',
+                form:form,
+                isLock:0,
+                getOption:function(el){
+                    var str='';
+                    if(el.content){
+                        var list=el.content.split(',');
+                        for(var i=0;i<list.length;i++){
+                            var item=list[i].split('|');
+                            if(item.length==2){
+                                str+='<option value="'+item[1]+'">'+item[0]+'</option>';
+                            }
+                        }
+                    }
+                    return str;
+                },
+                save:function(){
+                    var check = $v.validate(vm.form.$model, rules);//验证数据
+                    if (check.status) {/*通过验证*/
+                        vm.isLock=1;
+                        var postData={
+                            "name":vm.form.$model.name,
+                            "key":vm.form.$model.key,
+                            "description":vm.form.$model.description,
+                            "content":JSON.stringify(vm.form.$model.content)
+                        };
+                        if(id)postData.id=id;
+                        $a.post(app.$host +'setting/admin/config/add?'+new Date().getTime(),postData,function(data){//获取列表数据
+                            if(!data.error){
+                                $msg.success('提交成功!');
+                            }else{
+                                $msg.error('数据格式错误或已存在唯一数据!');
+                            }
+                            vm.isLock=0;
+                        });
+                    }else{
+                        $msg.error(rules[check.rejects[0].field].error);
+                    }
+                }
+            });
+            avalon.scan();
+        }
+
+    });
+
+    })();
+
+</script>

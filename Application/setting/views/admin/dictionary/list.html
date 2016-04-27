@@ -1,0 +1,39 @@
+<div class="f-cb f-mb10"><h3 class="list-title">dictionary数据</h3> <span class="f-fr"><a href="#!/?setting/admin/dictionary/addItem" class="f-btn f-btn-success">增加数据</a></span></div>
+<div class="mkoa-box f-p10"  ms-controller="dictionary-list">
+    <mkoa:pager  url="setting/admin/dictionary/findAll" searchurl="setting/admin/dictionary/search" >
+        <div slot="$top" id="search">
+            <select ms-duplex="searchKey" class="f-fl" >
+                <option value="id">ID</option>
+                <option value="name">字典名称</option><option value="key">唯一标识</option><option value="description">简介</option><option value="content">配置内容</option>
+            </select>
+            <input type="text" ms-duplex="searchValue" class="f-fl f-ml5"/>
+            <button ms-click="search" class="f-btn f-btn-success f-ml10" >搜索</button>
+            <button ms-if="searchOpen" ms-click="closeSearch" class="f-btn">清空搜索</button>
+        </div>
+        <table slot="$list" class="mkoa-table">
+            <thead>
+            <tr><th width="30">ID</th><th>字典名称</th><th>唯一标识</th><th>简介</th><th>配置内容</th><th width="155">创建时间</th><th width="100">操作</th></tr>
+            </thead>
+            <tbody>
+            <tr ms-repeat="listData"><td>{{el.id}}</td><td>{{el.name}}</td><td>{{el.key}}</td><td>{{el.description}}</td><td>{{el.content}}</td><td>{{el.createdAt|date("yyyy-MM-dd HH:mm:ss")}}</td>
+           <td><a ms-attr-href="'#!/?setting/admin/dictionary/addItem?id='+el.id"  class="f-btn f-btn-sm">编辑</a> <button  ms-click="remove($remove,el.id)" class="f-btn f-btn-sm">删除</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </mkoa:pager>
+</div>
+<script>
+    require(["mkoaAjax/mkoaAjax","mkoaPagerFull/mkoaPagerFull"], function ($a){
+       avalon.define({
+            $id:'dictionary-list',
+            remove:function($remove,id){
+                $a.getJSON(app.$host +'setting/admin/dictionary/delete',{id:id},function(data){//删除数据
+                    if(!data.error){
+                        $remove();
+                    }
+                });
+            }
+        });
+        avalon.scan();
+    });
+</script>

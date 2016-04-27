@@ -1,0 +1,45 @@
+<div class="f-cb" ms-controller="configItem">
+    <table class="mkoa-form">
+        <tr>
+            <td width="120"><span class="mkoa-form-title">配置名称:</span></td><td><input type="text" ms-duplex="configBase.name"/></td>
+        </tr>
+        <tr>
+            <td width="120"><span class="mkoa-form-title">标识（字母）:</span></td><td><input type="text" ms-duplex="configBase.key"/></td>
+        </tr>
+        <tr>
+            <td width="120"><span class="mkoa-form-title">类型:</span></td><td><select ms-duplex="configBase.type">
+            <option value="1">输入框</option><option value="2">多行输入框</option><option value="3">选项</option>
+        </select></td>
+        </tr>
+        <tr ms-if="configBase.type==3">
+            <td width="120"><span class="mkoa-form-title">输入框内容:</span></td>
+            <td>
+                <p>格式:key|value,key|value</p>
+                <textarea  ms-duplex="configBase.content"></textarea>
+            </td>
+        </tr>
+    </table>
+    <div class="f-mt10 f-tac">
+    <button class="f-btn f-btn-primary" type="button" ms-click="addConfig">保存</button>
+   </div>
+</div>
+<script>
+
+    //    avalon.vmodels['%fvm%'].txt=1;
+    //avalon.vmodels['%layerVm%'].closeLayer();
+
+   var configItem= avalon.define({
+        $id: "configItem",
+        configBase:{
+            name:'',
+            key:'',
+            type:1,//1 input  2 textarea 3 select
+            value:'',
+            content:''//配置内容
+        },
+        addConfig:function(){
+            avalon.vmodels['%fvm%'].form.content.push(configItem.configBase.$model);
+            avalon.vmodels['%layervm%'].closeLayer();
+        }
+    });
+</script>
