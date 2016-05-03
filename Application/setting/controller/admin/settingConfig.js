@@ -23,11 +23,10 @@ module.exports = function ($this) {
             var where = {id: $this.POST['id'] ? parseInt($this.POST['id']) : 0};
             var res,resData;
             if (where.id) {/*存在数据ID更新改数据*/
-                res = yield $D('config').update($this.POST, {where: where});
+                res = yield $D('settingConfig').update($this.POST, {where: where});
                 resData = $this.POST;
-                yield $M.setting['delConfig']($this.POST.key);//删除配置组缓存
             } else {/*新增*/
-                res = yield $D('config').build($this.POST).save();
+                res = yield $D('settingConfig').build($this.POST).save();
                 resData = res;
             }
             $this.success(resData);
@@ -42,7 +41,7 @@ module.exports = function ($this) {
         var where = {
             id: parseInt($this.GET['id'])
         };
-        var res = yield $D('config').findOne({where: where}, {raw: true});
+        var res = yield $D('settingConfig').findOne({where: where}, {raw: true});
         $this.success(res);
     };
 
@@ -52,7 +51,7 @@ module.exports = function ($this) {
         var perPages=$this.GET['perPages']?parseInt($this.GET['perPages']):10;//每页数据数
         var currentPage=$this.GET['currentPage']?parseInt($this.GET['currentPage']):1;//查询页码
         var where = {};
-        var res = yield $D('config').findAndCountAll({
+        var res = yield $D('settingConfig').findAndCountAll({
         where: where,
         limit: perPages,
         offset: perPages * (currentPage - 1)
@@ -71,7 +70,7 @@ module.exports = function ($this) {
     $like:'%'+$this.GET['searchValue']+'%'
     };
     }
-    var res = yield $D('config').findAndCountAll({
+    var res = yield $D('settingConfig').findAndCountAll({
     where: where,
     limit: perPages,
     offset: perPages * (currentPage - 1)
@@ -84,7 +83,7 @@ module.exports = function ($this) {
         var where = {
             id: parseInt($this.GET['id'])
         };
-        if (where.id)yield $D('config').destroy({where: where});
+        if (where.id)yield $D('settingConfig').destroy({where: where});
         $this.success();
     };
 

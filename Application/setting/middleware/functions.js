@@ -1,6 +1,6 @@
 module.exports = function(app){
     $M.setting={};
-    var db = $F.low('setting/config.json');
+    var db = $F.low('setting/lib.json');
     var db2 = $F.low('setting/dictionary.json');
     //获取一个配置组
     $M.setting['getConfig']=function *(configKey){

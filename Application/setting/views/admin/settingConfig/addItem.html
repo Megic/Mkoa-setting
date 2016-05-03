@@ -35,7 +35,7 @@
             <tr><td class="mkoa-form-title"><span>配置内容</span></td>
                 <td>
                     <mkoa:layer $fvm="config-addItem"  title="增加配置"  width="500" height="400">
-                        <button slot="$tpl" class="f-btn" type="button" ms-click="layerOpen(app.$host+'setting/admin/config/configItem')">增加配置项</button>
+                        <button slot="$tpl" class="f-btn" type="button" ms-click="layerOpen(app.$host+'setting/admin/settingConfig/configItem')">增加配置项</button>
                     </mkoa:layer>
                     <div ms-repeat="form.content">
                         <div class="config-list f-pr">
@@ -86,7 +86,7 @@
         var form={"name":"","key":"","description":"","content":[]};//数据对象
         require(["mkoaAjax/mkoaAjax","KoaValidator","mkoaMsg/mkoaMsg","mkoaLayer/mkoaLayer"],function($a,$v,$msg){
         if(id){//更新数据
-            $a.getJSON(app.$host +'setting/admin/config/findOne',{id:id,t:new Date().getTime()},function(data){//获取列表数据
+            $a.getJSON(app.$host +'setting/admin/settingConfig/findOne',{id:id,t:new Date().getTime()},function(data){//获取列表数据
                 if(!data.error){
                     data.data.content=JSON.parse(data.data.content);
                     pageLoad(data.data);
@@ -124,7 +124,7 @@
                             "content":JSON.stringify(vm.form.$model.content)
                         };
                         if(id)postData.id=id;
-                        $a.post(app.$host +'setting/admin/config/add?'+new Date().getTime(),postData,function(data){//获取列表数据
+                        $a.post(app.$host +'setting/admin/settingConfig/add?'+new Date().getTime(),postData,function(data){//获取列表数据
                             if(!data.error){
                                 $msg.success('提交成功!');
                             }else{

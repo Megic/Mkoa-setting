@@ -53,7 +53,7 @@
         var form={"name":"","key":"","description":"","content":[]};//数据对象
         require(["mkoaAjax/mkoaAjax","KoaValidator"],function($a,$v){
         if(id){//更新数据
-            $a.getJSON(app.$host +'setting/admin/dictionary/findOne',{id:id,t:new Date().getTime()},function(data){//获取列表数据
+            $a.getJSON(app.$host +'setting/admin/settingDictionary/findOne',{id:id,t:new Date().getTime()},function(data){//获取列表数据
                 if(!data.error){
                     data.data.content=JSON.parse(data.data.content);
                     pageLoad(data.data);
@@ -82,7 +82,7 @@
                             "content":JSON.stringify(vm.form.$model.content)
                         };
                         if(id)postData.id=id;
-                    $a.post(app.$host +'setting/admin/dictionary/add?'+new Date().getTime(),postData,function(data){//获取列表数据
+                    $a.post(app.$host +'setting/admin/settingDictionary/add?'+new Date().getTime(),postData,function(data){//获取列表数据
                         if(!data.error){
                             alert('提交成功!');
                         }else{

@@ -23,10 +23,10 @@ module.exports = function ($this) {
             var where = {id: $this.POST['id'] ? parseInt($this.POST['id']) : 0};
             var res,resData;
             if (where.id) {/*存在数据ID更新改数据*/
-                res = yield $D('dictionary').update($this.POST, {where: where});
+                res = yield $D('settingDictionary').update($this.POST, {where: where});
                 resData = $this.POST;
             } else {/*新增*/
-                res = yield $D('dictionary').build($this.POST).save();
+                res = yield $D('settingDictionary').build($this.POST).save();
                 resData = res;
             }
             $this.success(resData);
@@ -41,7 +41,7 @@ module.exports = function ($this) {
         var where = {
             id: parseInt($this.GET['id'])
         };
-        var res = yield $D('dictionary').findOne({where: where}, {raw: true});
+        var res = yield $D('settingDictionary').findOne({where: where}, {raw: true});
         $this.success(res);
     };
 
@@ -51,7 +51,7 @@ module.exports = function ($this) {
         var perPages=$this.GET['perPages']?parseInt($this.GET['perPages']):10;//每页数据数
         var currentPage=$this.GET['currentPage']?parseInt($this.GET['currentPage']):1;//查询页码
         var where = {};
-        var res = yield $D('dictionary').findAndCountAll({
+        var res = yield $D('settingDictionary').findAndCountAll({
         where: where,
         limit: perPages,
         offset: perPages * (currentPage - 1)
@@ -70,7 +70,7 @@ module.exports = function ($this) {
     $like:'%'+$this.GET['searchValue']+'%'
     };
     }
-    var res = yield $D('dictionary').findAndCountAll({
+    var res = yield $D('settingDictionary').findAndCountAll({
     where: where,
     limit: perPages,
     offset: perPages * (currentPage - 1)
@@ -83,7 +83,7 @@ module.exports = function ($this) {
         var where = {
             id: parseInt($this.GET['id'])
         };
-        if (where.id)yield $D('dictionary').destroy({where: where});
+        if (where.id)yield $D('settingDictionary').destroy({where: where});
         $this.success();
     };
 

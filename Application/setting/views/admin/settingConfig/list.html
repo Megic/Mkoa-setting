@@ -1,6 +1,6 @@
-<div class="f-cb f-mb10"><h3 class="list-title">config数据</h3> <span class="f-fr"><a href="#!/?setting/admin/config/addItem" class="f-btn f-btn-success">增加数据</a></span></div>
+<div class="f-cb f-mb10"><h3 class="list-title">config数据</h3> <span class="f-fr"><a href="#!/?setting/admin/settingConfig/addItem" class="f-btn f-btn-success">增加数据</a></span></div>
 <div class="mkoa-box f-p10"  ms-controller="config-list">
-    <mkoa:pager  url="setting/admin/config/findAll" searchurl="setting/admin/config/search" >
+    <mkoa:pager  url="setting/admin/settingConfig/findAll" searchurl="setting/admin/settingConfig/search" >
         <div slot="$top" id="search">
             <select ms-duplex="searchKey" class="f-fl" >
                 <option value="id">ID</option>
@@ -16,7 +16,7 @@
             </thead>
             <tbody>
             <tr ms-repeat="listData"><td>{{el.id}}</td><td>{{el.name}}</td><td>{{el.key}}</td><td>{{el.description}}</td><td>{{el.createdAt|date("yyyy-MM-dd HH:mm:ss")}}</td>
-           <td><a ms-attr-href="'#!/?setting/admin/config/addItem?id='+el.id"  class="f-btn f-btn-sm">编辑</a> <button  ms-click="remove($remove,el.id)" class="f-btn f-btn-sm">删除</button></td>
+           <td><a ms-attr-href="'#!/?setting/admin/settingConfig/addItem?id='+el.id"  class="f-btn f-btn-sm">编辑</a> <button  ms-click="remove($remove,el.id)" class="f-btn f-btn-sm">删除</button></td>
             </tr>
             </tbody>
         </table>
@@ -27,7 +27,7 @@
        avalon.define({
             $id:'config-list',
             remove:function($remove,id){
-                $a.getJSON(app.$host +'setting/admin/config/delete',{id:id},function(data){//删除数据
+                $a.getJSON(app.$host +'setting/admin/settingConfig/delete',{id:id},function(data){//删除数据
                     if(!data.error){
                         $remove();
                     }

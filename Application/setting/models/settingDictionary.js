@@ -2,27 +2,27 @@
 * Created by Mkoa
 */
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('config',{
+    return sequelize.define('settingDictionary',{
                 name: {
                         type: DataTypes.STRING(50),
                         allowNull:false,
                         defaultValue:'0',
                         unique:false,
-                        comment: '配置名称'
+                        comment: '字典名称'
                       },
                 key: {
                         type: DataTypes.STRING(50),
                         allowNull:false,
                         defaultValue:'0',
                         unique:true,
-                        comment: '配置标识'
+                        comment: '唯一标识'
                       },
                 description: {
                         type: DataTypes.STRING(255),
                         allowNull:false,
                         defaultValue:'0',
                         unique:false,
-                        comment: '配置简介'
+                        comment: '简介'
                       },
                 content: {
                         type: DataTypes.TEXT,
@@ -31,8 +31,8 @@ module.exports = function(sequelize, DataTypes) {
                         unique:false,
                         comment: '配置内容'
                       }}, {
-        tableName:'mkoa_config',
-        comment: '配置表',
+        tableName:'mkoa_settingDictionary',
+        comment: '字典表',
         timestamps:true,
         indexes:[],
         paranoid:false,
