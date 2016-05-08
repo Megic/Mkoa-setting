@@ -28,9 +28,13 @@ module.exports = function(app){
             return cdata;
         }else{
             var res = yield $D('settingDictionary').findOne({where:{key:configKey}}, {raw: true});
+            var curData={};
             var listData=JSON.parse(res.content);
-            db2(configKey).push(listData);
-            return listData;
+            $F._.each(listData,function(el, index, list){
+                curData[el.value]=el.name;
+            });
+            db2(configKey).push(curData);
+            return curData;
         }
     };
 
