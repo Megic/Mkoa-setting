@@ -2,13 +2,13 @@ module.exports = function(app){
     $M.setting={};
     var db = $F.low('setting/lib.json');
     var db2 = $F.low('setting/dictionary.json');
-    //获取一个配置组
+
     $M.setting['getConfig']=function *(configKey){
         var cdata=db(configKey).first();
         if(cdata){
             return cdata;
         }else{
-            var res = yield $D('config').findOne({where:{key:configKey}}, {raw: true});
+            var res = yield $D('settingConfig').findOne({where:{key:configKey}}, {raw: true});
             var curData={};
             var listData=JSON.parse(res.content);
             $F._.each(listData,function(el, index, list){
@@ -18,7 +18,7 @@ module.exports = function(app){
             return curData;
         }
     };
-    //删除一个配置组
+
     $M.setting['delConfig']=function *(configKey){
         delete db.object[configKey];
     };
@@ -27,7 +27,7 @@ module.exports = function(app){
         if(cdata){
             return cdata;
         }else{
-            var res = yield $D('config').findOne({where:{key:configKey}}, {raw: true});
+            var res = yield $D('settingDictionary').findOne({where:{key:configKey}}, {raw: true});
             var curData={};
             var listData=JSON.parse(res.content);
             $F._.each(listData,function(el, index, list){
@@ -37,7 +37,7 @@ module.exports = function(app){
             return curData;
         }
     };
-    //删除一个配置组
+
     $M.setting['delDictionary']=function *(configKey){
         delete db2.object[configKey];
     }

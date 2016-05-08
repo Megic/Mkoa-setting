@@ -25,6 +25,7 @@ module.exports = function ($this) {
             if (where.id) {/*存在数据ID更新改数据*/
                 res = yield $D('settingConfig').update($this.POST, {where: where});
                 resData = $this.POST;
+                yield $M.setting['delConfig']($this.POST.key);//删除配置组缓存
             } else {/*新增*/
                 res = yield $D('settingConfig').build($this.POST).save();
                 resData = res;
