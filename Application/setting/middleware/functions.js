@@ -12,7 +12,7 @@ module.exports = function(app){
             var curData={};
             var listData=JSON.parse(res.content);
             $F._.each(listData,function(el, index, list){
-                curData[el.key]=el.value;
+                curData[el.name]=el.value;
             });
             db(configKey).push(curData);
             return curData;
@@ -31,7 +31,7 @@ module.exports = function(app){
             var curData={};
             var listData=JSON.parse(res.content);
             $F._.each(listData,function(el, index, list){
-                curData[el.key]=el.value;
+                curData[el.name]=el.value;
             });
             db2(configKey).push(curData);
             return curData;
