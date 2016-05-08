@@ -12,7 +12,7 @@ module.exports = function(app){
             var curData={};
             var listData=JSON.parse(res.content);
             $F._.each(listData,function(el, index, list){
-                curData[el.name]=el.value;
+                curData[el.key]=el.value;
             });
             db(configKey).push(curData);
             return curData;
@@ -28,13 +28,9 @@ module.exports = function(app){
             return cdata;
         }else{
             var res = yield $D('settingDictionary').findOne({where:{key:configKey}}, {raw: true});
-            var curData={};
             var listData=JSON.parse(res.content);
-            $F._.each(listData,function(el, index, list){
-                curData[el.name]=el.value;
-            });
-            db2(configKey).push(curData);
-            return curData;
+            db2(configKey).push(listData);
+            return listData;
         }
     };
 
